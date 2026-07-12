@@ -1,4 +1,4 @@
-# HEAD チャット ミッション・ドキュメント
+﻿# HEAD チャット ミッション・ドキュメント
 
 **作成日：2026年7月**
 **ステータス：運用中**
@@ -339,7 +339,7 @@ URL：未定
 ### 共通ルール（全サイト）
 ```
 ・Claude APIモデル：claude-haiku-4-5固定（変更禁止）
-・画像取得：Unsplash＋Wikimedia Commons
+・画像取得：Pixabay＋Wikimedia Commons
 ・画像チェック：RelevanceChecker必須
 ・使用済み画像管理：used_images.json（直近100件）
 ・投稿ステータス：publish（本番）
