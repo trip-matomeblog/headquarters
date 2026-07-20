@@ -1,7 +1,7 @@
 ﻿# 多サイト展開プレイブック（trip-matomeblog方式）
 
-バージョン：v1.3
-最終更新：2026年7月16日
+バージョン：v1.4
+最終更新：2026年7月21日
 管理者：HEADチャット
 正本配置先：C:\headquarters\shared-multi-site-playbook.md
 
@@ -78,6 +78,8 @@ WordPress投稿タイムアウト60秒（wordpress.py）：create_post関数の�
 記事主題の関連性判定への反映（article_topic引数）：filter_relevant()にarticle_topic引数を追加し、記事タイトルを判定プロンプトに渡す。strict=False時に記事主題と画像が明らかにかけ離れている場合は除外する旨を明記する
 SEOキーワードの本文反映ルール：文体を崩さず、最低1個のキーワードを文字列としてそのまま本文に含める。「無理なく盛り込む」ではなく「最低1個は文字列としてそのまま含める」という強制力のある指示にする。完全自動系統は事後チェック運用、手動系統は投稿前に候補を提示してから実行する
 X投稿文・note本文へのURL自動追記：投稿完了後の確定IDを使いブログ記事URLを自動追記する。GitHub ActionsログではSecretsマスキングによりURL表示が***になるため手動確認が必要
+画像ソース（source）の引き継ぎ（wordpress.py）：upload_photo_to_media()でWordPressに再アップロードする際、元のPhotoオブジェクトのsourceフィールド（pixabay/wikimedia等）を必ず引き継ぐこと。引き継がないとデフォルト値にリセットされ、クレジット表記が誤った値になる
+strict引数のプロンプト反映（images.py）：RelevanceChecker.filter_relevant()のstrict引数（メイン検索=True／フォールバック=False）は必ずプロンプトに反映すること。strict=True時のみ「看板のみの画像」「室内・棚のクローズアップ」「無関係な食べ物単体」を明示的な除外基準として追加する。strict=False時は基本方針（多少ズレてもOK）を維持し画像0件を防ぐ
 
 ## 3. サイトごとに再設計が必要な部分
 
@@ -192,6 +194,14 @@ SEOキーワードの生成方法：自動生成（daily記事）か手動入力
 事例：strict=False時にキーワード単体一致だけで判定し、記事主題と無関係な画像が通過した。
 教訓：filter_relevant()にarticle_topic引数を追加し、記事タイトルを判定プロンプトの冒頭に渡す。
 
+### 5.17 画像ソースはWordPress再アップロード時に必ず引き継ぐ
+事例：upload_photo_to_media()でPhotoオブジェクトを再生成する際にsourceフィールドを引き継がず、デフォルト値「pixabay」にリセットされてWikimedia由来の画像に「on Pixabay」と誤ったクレジット表記が付いた。
+教訓：WordPressへの再アップロード後に新しいPhotoオブジェクトを生成する場合は、source=photo.sourceのように元のsource値を明示的に引き継ぐこと。
+
+### 5.18 strict引数は必ずプロンプトに反映する
+事例：RelevanceChecker.filter_relevant()のstrict引数がプロンプトに反映されておらず、メイン検索（strict=True）でも常に緩い基準で判定していた。看板・室内・無関係な食べ物単体の画像が通過した。
+教訓：strict=True時とstrict=False時で異なる除外基準をプロンプトに明記する。strict=True時の除外基準（看板のみ・室内棚のクローズアップ・無関係な食べ物単体等）を具体例として示す。strict=False時は画像0件を防ぐため基本方針（多少ズレてもOK）を維持する。
+
 ## 6. ドキュメント修正ルール
 
 ### 6.1 修正の種類と担当者
@@ -251,6 +261,15 @@ HEAD経由が必要なケース：
 5. 各サイトチャットが自サイトのspec.md末尾の参照バージョンを更新
 
 ## 7. 更新履歴
+
+### v1.4（2026/07/21）
+- 2章「移植可能な型」に以下を追加：
+  - 画像ソース（source）の引き継ぎ（wordpress.py）
+  - strict引数のプロンプト反映（images.py）
+- 5章「教訓」に5.17・5.18を追加：
+  - 画像ソースはWordPress再アップロード時に引き継ぐ（5.17）
+  - strict引数は必ずプロンプトに反映する（5.18）
+- 参照バージョン：README-document-management.md v1.1
 
 ### v1.3（2026/07/16）
 - 2章「移植可能な型」に以下を追加：
