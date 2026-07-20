@@ -1,4 +1,4 @@
-# 新サイト構築 実践手順ガイド
+﻿# 新サイト構築 実践手順ガイド
 
 **作成日：2026年7月9日**
 **参照元：`trip-matomeblog-analysis.md`（サイト分析）、`trip-matomeblog_spec.md`（技術仕様）**
@@ -105,7 +105,7 @@ trip-matomeblogは無料API（Wikimedia/Pixabay）で運用していますが、
 - [ ] レンタルサーバー契約・WordPress設置
 - [ ] WordPressの初期設定（パーマリンク設定、テーマ選定等）
 - [ ] Application Password発行（WP管理画面 > ユーザー > プロフィール > アプリケーションパスワード）
-- [ ] GitHubリポジトリ作成（trip-blogリポジトリをテンプレートとしてコピー、または`git clone`後に`.git`履歴を削除して新規リポジトリ化）
+- [ ] GitHubリポジトリ作成（trip-blogリポジトリをテンプレートとしてコピー、または`git clone`後に`.git`履歴を削除して新規リポジトリ化）。②の方法を選ぶ場合、削除前に過去のコミット履歴にAPIキー等の機微情報が含まれていないか確認すること。①のテンプレート使用ではこの懸念は生じない。
 - [ ] GitHub Secretsに以下を登録
   - `ANTHROPIC_API_KEY`
   - `PIXABAY_API_KEY`
